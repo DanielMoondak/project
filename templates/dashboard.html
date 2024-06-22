@@ -84,7 +84,6 @@
                             })
                         );
 
-                        // Serie 1: Puntos de acceso
                         var series1 = chart.series.push(
                             am5xy.LineSeries.new(root, {
                                 name: "Puntos de acceso",
@@ -95,21 +94,37 @@
                             })
                         );
 
-                        // Serie 2: Retorno de inversión
                         var series2 = chart.series.push(
                             am5xy.LineSeries.new(root, {
-                                name: "Retorno de inversión",
+                                name: "Costo por punto",
                                 xAxis: xAxis,
                                 yAxis: yAxis,
-                                valueYField: "Retorno_inv", // Campo Y
+                                valueYField: "Costo_punto", // Campo Y
                                 categoryXField: "Nombre" // Campo X
                             })
                         );
 
-                        // Puedes añadir más series según los datos que quieras representar
+                        var series3 = chart.series.push(
+                            am5xy.LineSeries.new(root, {
+                                name: "Otro dato 1",
+                                xAxis: xAxis,
+                                yAxis: yAxis,
+                                valueYField: "Otro_dato_1", // Campo Y
+                                categoryXField: "Nombre" // Campo X
+                            })
+                        );
 
-                        series1.data.setAll(data);
-                        series2.data.setAll(data);
+                        var series4 = chart.series.push(
+                            am5xy.LineSeries.new(root, {
+                                name: "Otro dato 2",
+                                xAxis: xAxis,
+                                yAxis: yAxis,
+                                valueYField: "Otro_dato_2", // Campo Y
+                                categoryXField: "Nombre" // Campo X
+                            })
+                        );
+
+                        chart.data.setAll(data);
 
                         chart.set("cursor", am5xy.XYCursor.new(root, {}));
                     });
@@ -141,8 +156,17 @@
                             })
                         );
 
-                        // Serie 1: Costo por punto
                         var series1 = chart.series.push(
+                            am5xy.LineSeries.new(root, {
+                                name: "Puntos de acceso",
+                                xAxis: xAxis,
+                                yAxis: yAxis,
+                                valueYField: "Puntos_de_acceso", // Campo Y
+                                categoryXField: "Nombre" // Campo X
+                            })
+                        );
+
+                        var series2 = chart.series.push(
                             am5xy.LineSeries.new(root, {
                                 name: "Costo por punto",
                                 xAxis: xAxis,
@@ -152,21 +176,27 @@
                             })
                         );
 
-                        // Serie 2: Otro valor (ejemplo)
-                        var series2 = chart.series.push(
+                        var series3 = chart.series.push(
                             am5xy.LineSeries.new(root, {
-                                name: "Otro valor",
+                                name: "Otro dato 1",
                                 xAxis: xAxis,
                                 yAxis: yAxis,
-                                valueYField: "Costo_punto", // Campo Y
+                                valueYField: "Otro_dato_1", // Campo Y
                                 categoryXField: "Nombre" // Campo X
                             })
                         );
 
-                        // Puedes añadir más series según los datos que quieras representar
+                        var series4 = chart.series.push(
+                            am5xy.LineSeries.new(root, {
+                                name: "Otro dato 2",
+                                xAxis: xAxis,
+                                yAxis: yAxis,
+                                valueYField: "Otro_dato_2", // Campo Y
+                                categoryXField: "Nombre" // Campo X
+                            })
+                        );
 
-                        series1.data.setAll(data);
-                        series2.data.setAll(data);
+                        chart.data.setAll(data);
 
                         chart.set("cursor", am5xy.XYCursor.new(root, {}));
                     });
