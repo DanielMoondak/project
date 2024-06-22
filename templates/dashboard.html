@@ -48,7 +48,7 @@
         }
 
         function fetchData(tabName) {
-            fetch('/data')  // Ruta para obtener datos del CSV como JSON desde Flask
+            fetch('/data')  // Ruta para obtener datos del backend Flask
                 .then(response => response.json())
                 .then(data => {
                     if (tabName === 'dashboard1') {
