@@ -1,62 +1,148 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard</title>
+    <title>Múltiples Dashboards</title>
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <style>
+        /* Estilos para las pestañas */
+        .tab {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <div id="chartdiv" style="width: 100%; height: 500px;"></div>
+    <h1>Dashboard Principal</h1>
+
+    <!-- Pestañas para los dashboards -->
+    <div>
+        <button onclick="openTab(event, 'dashboard1')">Dashboard 1</button>
+        <button onclick="openTab(event, 'dashboard2')">Dashboard 2</button>
+    </div>
+
+    <!-- Contenido de los dashboards -->
+    <div id="dashboard1" class="tab">
+        <!-- Contenido del Dashboard 1 -->
+        <h2>Dashboard 1</h2>
+        <div id="chartdiv1" style="width: 100%; height: 400px;"></div>
+    </div>
+
+    <div id="dashboard2" class="tab">
+        <!-- Contenido del Dashboard 2 -->
+        <h2>Dashboard 2</h2>
+        <div id="chartdiv2" style="width: 100%; height: 400px;"></div>
+    </div>
+
+    <!-- Script para alternar entre pestañas -->
     <script>
-        fetch('/data')
-            .then(response => response.json())
-            .then(data => {
-                am5.ready(function() {
-                    var root = am5.Root.new("chartdiv");
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            document.getElementById(tabName).style.display = "block";
+        }
 
-                    var chart = root.container.children.push(
-                        am5xy.XYChart.new(root, {
-                            panX: true,
-                            panY: true,
-                            wheelX: "panX",
-                            wheelY: "zoomX",
-                            pinchZoomX: true
-                        })
-                    );
+        // Función para cargar y renderizar gráficos con AmCharts
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/data')  // Ruta para obtener datos del CSV como JSON desde Flask
+                .then(response => response.json())
+                .then(data => {
+                    // Dashboard 1
+                    am5.ready(function() {
+                        var root = am5.Root.new("chartdiv1");
 
-                    var xAxis = chart.xAxes.push(
-                        am5xy.DateAxis.new(root, {
-                            maxDeviation: 0.1,
-                            baseInterval: {
-                                timeUnit: "day",
-                                count: 1
-                            },
-                            renderer: am5xy.AxisRendererX.new(root, {})
-                        })
-                    );
+                        var chart = root.container.children.push(
+                            am5xy.XYChart.new(root, {
+                                panX: true,
+                                panY: true,
+                                wheelX: "panX",
+                                wheelY: "zoomX",
+                                pinchZoomX: true
+                            })
+                        );
 
-                    var yAxis = chart.yAxes.push(
-                        am5xy.ValueAxis.new(root, {
-                            renderer: am5xy.AxisRendererY.new(root, {})
-                        })
-                    );
+                        var xAxis = chart.xAxes.push(
+                            am5xy.DateAxis.new(root, {
+                                maxDeviation: 0.1,
+                                baseInterval: {
+                                    timeUnit: "day",
+                                    count: 1
+                                },
+                                renderer: am5xy.AxisRendererX.new(root, {})
+                            })
+                        );
 
-                    var series = chart.series.push(
-                        am5xy.LineSeries.new(root, {
-                            name: "Series",
-                            xAxis: xAxis,
-                            yAxis: yAxis,
-                            valueYField: "value",  // Asegúrate de que estos nombres de campo coincidan
-                            valueXField: "date"    // con los nombres en tu archivo CSV
-                        })
-                    );
+                        var yAxis = chart.yAxes.push(
+                            am5xy.ValueAxis.new(root, {
+                                renderer: am5xy.AxisRendererY.new(root, {})
+                            })
+                        );
 
-                    series.data.setAll(data);
+                        var series1 = chart.series.push(
+                            am5xy.LineSeries.new(root, {
+                                name: "Puntos de acceso",
+                                xAxis: xAxis,
+                                yAxis: yAxis,
+                                valueYField: "Puntos_de_acceso",
+                                valueXField: "Nombre"
+                            })
+                        );
 
-                    chart.set("cursor", am5xy.XYCursor.new(root, {}));
-                });
-            })
-            .catch(error => console.error('Error loading data:', error));
+                        series1.data.setAll(data);
+
+                        chart.set("cursor", am5xy.XYCursor.new(root, {}));
+                    });
+
+                    // Dashboard 2
+                    am5.ready(function() {
+                        var root = am5.Root.new("chartdiv2");
+
+                        var chart = root.container.children.push(
+                            am5xy.XYChart.new(root, {
+                                panX: true,
+                                panY: true,
+                                wheelX: "panX",
+                                wheelY: "zoomX",
+                                pinchZoomX: true
+                            })
+                        );
+
+                        var xAxis = chart.xAxes.push(
+                            am5xy.DateAxis.new(root, {
+                                maxDeviation: 0.1,
+                                baseInterval: {
+                                    timeUnit: "day",
+                                    count: 1
+                                },
+                                renderer: am5xy.AxisRendererX.new(root, {})
+                            })
+                        );
+
+                        var yAxis = chart.yAxes.push(
+                            am5xy.ValueAxis.new(root, {
+                                renderer: am5xy.AxisRendererY.new(root, {})
+                            })
+                        );
+
+                        var series2 = chart.series.push(
+                            am5xy.LineSeries.new(root, {
+                                name: "Costo por punto",
+                                xAxis: xAxis,
+                                yAxis: yAxis,
+                                valueYField: "Costo_punto",
+                                valueXField: "Nombre"
+                            })
+                        );
+
+                        series2.data.setAll(data);
+
+                        chart.set("cursor", am5xy.XYCursor.new(root, {}));
+                    });
+                })
+                .catch(error => console.error('Error loading data:', error));
+        });
     </script>
 </body>
 </html>
