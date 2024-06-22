@@ -18,7 +18,7 @@ def dashboard():
 @app.route('/data')
 def get_data():
     try:
-        csv_path = os.path.join('data', 'wifi.csv')
+        csv_path = os.path.join('project', 'data', 'wifi.csv')  # Corregir la ruta al archivo CSV
         df = pd.read_csv(csv_path)
         data = df.to_dict(orient='records')
         return jsonify(data)
