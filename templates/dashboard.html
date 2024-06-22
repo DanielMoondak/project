@@ -89,7 +89,7 @@
                                 name: "Puntos de acceso",
                                 xAxis: xAxis,
                                 yAxis: yAxis,
-                                valueYField: "Puntos_de_acceso", // Campo Y
+                                valueYField: "Punto_de_acceso", // Campo Y
                                 categoryXField: "Nombre" // Campo X
                             })
                         );
@@ -99,27 +99,17 @@
                                 name: "Costo por punto",
                                 xAxis: xAxis,
                                 yAxis: yAxis,
-                                valueYField: "Costo_punto", // Campo Y
+                                valueYField: "Costo", // Campo Y
                                 categoryXField: "Nombre" // Campo X
                             })
                         );
 
                         var series3 = chart.series.push(
                             am5xy.LineSeries.new(root, {
-                                name: "Otro dato 1",
+                                name: "Retorno de inversión",
                                 xAxis: xAxis,
                                 yAxis: yAxis,
-                                valueYField: "Otro_dato_1", // Campo Y
-                                categoryXField: "Nombre" // Campo X
-                            })
-                        );
-
-                        var series4 = chart.series.push(
-                            am5xy.LineSeries.new(root, {
-                                name: "Otro dato 2",
-                                xAxis: xAxis,
-                                yAxis: yAxis,
-                                valueYField: "Otro_dato_2", // Campo Y
+                                valueYField: "retorno_inv", // Campo Y
                                 categoryXField: "Nombre" // Campo X
                             })
                         );
@@ -158,40 +148,30 @@
 
                         var series1 = chart.series.push(
                             am5xy.LineSeries.new(root, {
-                                name: "Puntos de acceso",
+                                name: "Alcaldía",
                                 xAxis: xAxis,
                                 yAxis: yAxis,
-                                valueYField: "Puntos_de_acceso", // Campo Y
+                                valueYField: "Alcaldia", // Campo Y
                                 categoryXField: "Nombre" // Campo X
                             })
                         );
 
                         var series2 = chart.series.push(
                             am5xy.LineSeries.new(root, {
-                                name: "Costo por punto",
+                                name: "Colonia",
                                 xAxis: xAxis,
                                 yAxis: yAxis,
-                                valueYField: "Costo_punto", // Campo Y
+                                valueYField: "Colonia", // Campo Y
                                 categoryXField: "Nombre" // Campo X
                             })
                         );
 
                         var series3 = chart.series.push(
                             am5xy.LineSeries.new(root, {
-                                name: "Otro dato 1",
+                                name: "Costo",
                                 xAxis: xAxis,
                                 yAxis: yAxis,
-                                valueYField: "Otro_dato_1", // Campo Y
-                                categoryXField: "Nombre" // Campo X
-                            })
-                        );
-
-                        var series4 = chart.series.push(
-                            am5xy.LineSeries.new(root, {
-                                name: "Otro dato 2",
-                                xAxis: xAxis,
-                                yAxis: yAxis,
-                                valueYField: "Otro_dato_2", // Campo Y
+                                valueYField: "Costo", // Campo Y
                                 categoryXField: "Nombre" // Campo X
                             })
                         );
