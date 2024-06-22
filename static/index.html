@@ -126,4 +126,28 @@
                             })
                         );
 
-                        var series
+                        var series2 = chart.series.push(
+                            am5xy.LineSeries.new(root, {
+                                name: "Costo por punto",
+                                xAxis: xAxis,
+                                yAxis: yAxis,
+                                valueYField: "Costo_punto",
+                                categoryXField: "Nombre"
+                            })
+                        );
+
+                        series2.data.setAll(data);
+
+                        chart.set("cursor", am5xy.XYCursor.new(root, {}));
+                    });
+                })
+                .catch(error => console.error('Error loading data:', error));
+        });
+
+        // Abre el primer tab por defecto
+        window.onload = function() {
+            openTab(null, 'dashboard1');
+        };
+    </script>
+</body>
+</html>
