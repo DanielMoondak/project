@@ -4,12 +4,10 @@ import os
 
 app = Flask(__name__)
 
-# Ruta para servir la página principal
 @app.route('/')
 def index():
     return send_from_directory('static', 'index.html')
 
-# Ruta para obtener los datos del CSV
 @app.route('/data')
 def get_data():
     csv_path = os.path.join('data', 'wifi.csv')
@@ -18,4 +16,5 @@ def get_data():
     return jsonify(data)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=True, host='0.0.0.0', port=port)
