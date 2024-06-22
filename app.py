@@ -1,18 +1,8 @@
 from flask import Flask, jsonify, send_from_directory, render_template
-from flask_mysqldb import MySQL
+import pandas as pd
 import os
 
 app = Flask(__name__)
-
-# Configuración de la base de datos MySQL
-app.config['MYSQL_HOST'] = 'db-mysql-nyc3-83474-do-user-83474-0.b.db.ondigitalocean.com'
-app.config['MYSQL_PORT'] = 25060
-app.config['MYSQL_USER'] = 'id22349349_daniel'
-app.config['MYSQL_PASSWORD'] = 'Dani123$'
-app.config['MYSQL_DB'] = 'id22349349_dashboard'
-
-# Inicialización de la extensión MySQL
-mysql = MySQL(app)
 
 # Ruta para servir el archivo index.html desde la carpeta static
 @app.route('/')
@@ -24,19 +14,16 @@ def index():
 def dashboard():
     return render_template('dashboard.html')
 
-# Ruta para obtener datos desde la base de datos MySQL y devolverlos como JSON
+# Ruta para obtener datos del archivo CSV como JSON
 @app.route('/data')
 def get_data():
     try:
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM wifi")
-        rows = cur.fetchall()
-        columns = [desc[0] for desc in cur.description]
-        data = [dict(zip(columns, row)) for row in rows]
-        cur.close()
+        csv_path = os.path.join('data', 'wifi.csv')
+        df = pd.read_csv(csv_path)
+        data = df.to_dict(orient='records')
         return jsonify(data)
     except Exception as e:
-        return jsonify({'error': str(e)}), 500  # Devuelve un error 500 en caso de excepción
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
