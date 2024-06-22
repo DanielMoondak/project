@@ -1,13 +1,20 @@
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, send_from_directory, render_template
 import pandas as pd
 import os
 
 app = Flask(__name__)
 
+# Ruta para servir el archivo index.html desde la carpeta static
 @app.route('/')
 def index():
     return send_from_directory('static', 'index.html')
 
+# Ruta para servir el dashboard.html desde la carpeta templates
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+# Ruta para obtener datos del archivo CSV como JSON
 @app.route('/data')
 def get_data():
     csv_path = os.path.join('data', 'wifi.csv')
