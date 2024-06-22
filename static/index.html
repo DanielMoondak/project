@@ -36,7 +36,7 @@
         <div id="chartdiv2" style="width: 100%; height: 400px;"></div>
     </div>
 
-    <!-- Script para alternar entre pestañas -->
+    <!-- Script para alternar entre pestañas y cargar datos -->
     <script>
         function openTab(evt, tabName) {
             var i, tabcontent;
@@ -73,7 +73,7 @@
 
                         var xAxis = chart.xAxes.push(
                             am5xy.CategoryAxis.new(root, {
-                                categoryField: "Nombre",
+                                categoryField: "Nombre", // Campo X
                                 renderer: am5xy.AxisRendererX.new(root, {})
                             })
                         );
@@ -89,8 +89,8 @@
                                 name: "Puntos de acceso",
                                 xAxis: xAxis,
                                 yAxis: yAxis,
-                                valueYField: "Puntos_de_acceso",
-                                categoryXField: "Nombre"
+                                valueYField: "Puntos_de_acceso", // Campo Y
+                                categoryXField: "Nombre" // Campo X
                             })
                         );
 
@@ -115,7 +115,7 @@
 
                         var xAxis = chart.xAxes.push(
                             am5xy.CategoryAxis.new(root, {
-                                categoryField: "Nombre",
+                                categoryField: "Nombre", // Campo X
                                 renderer: am5xy.AxisRendererX.new(root, {})
                             })
                         );
@@ -131,8 +131,8 @@
                                 name: "Costo por punto",
                                 xAxis: xAxis,
                                 yAxis: yAxis,
-                                valueYField: "Costo_punto",
-                                categoryXField: "Nombre"
+                                valueYField: "Costo_punto", // Campo Y
+                                categoryXField: "Nombre" // Campo X
                             })
                         );
 
