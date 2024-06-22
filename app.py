@@ -29,11 +29,15 @@ def get_data():
     try:
         cur = mysql.connection.cursor()
         cur.execute("SELECT * FROM wifi")
-        data = cur.fetchall()
+        rows = cur.fetchall()
+        columns = [desc[0] for desc in cur.description]
+        data = [dict(zip(columns, row)) for row in rows]
         cur.close()
         return jsonify(data)
     except Exception as e:
-        return jsonify({'error': str(e)}), 500  # Devuelve un error 500 en caso de excepción
+        return jsonify({'error': str(e)}), 500
+
+        # Devuelve un error 500 en caso de excepción
 
 # Endpoint temporal para verificar los datos obtenidos
 @app.route('/rawdata')
