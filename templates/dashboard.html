@@ -1,65 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard</title>
-    <!-- Include AmCharts core and charts -->
+    <title>Dashboard 1</title>
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
 </head>
 <body>
-    <div id="chartdiv" style="width: 100%; height: 500px;"></div>
+    <h1>Dashboard 1</h1>
+    <div id="chartdiv1" style="width: 100%; height: 400px;"></div>
+
     <script>
-        // Fetch data from backend
-        fetch('/data')
-            .then(response => response.json())
-            .then(data => {
-                // Create chart instance
-                var root = am5.Root.new("chartdiv");
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/data')  // Ruta para obtener datos del CSV como JSON desde Flask
+                .then(response => response.json())
+                .then(data => {
+                    am5.ready(function() {
+                        var root = am5.Root.new("chartdiv1");
 
-                // Create XY chart
-                var chart = root.container.children.push(
-                    am5xy.XYChart.new(root, {
-                        panX: true,
-                        panY: true,
-                        wheelX: "panX",
-                        wheelY: "zoomX",
-                        pinchZoomX: true
-                    })
-                );
+                        var chart = root.container.children.push(
+                            am5xy.XYChart.new(root, {
+                                panX: true,
+                                panY: true,
+                                wheelX: "panX",
+                                wheelY: "zoomX",
+                                pinchZoomX: true
+                            })
+                        );
 
-                // Add data
-                var xAxis = chart.xAxes.push(
-                    am5xy.DateAxis.new(root, {
-                        maxDeviation: 0.1,
-                        baseInterval: {
-                            timeUnit: "day",
-                            count: 1
-                        },
-                        renderer: am5xy.AxisRendererX.new(root, {})
-                    })
-                );
+                        var xAxis = chart.xAxes.push(
+                            am5xy.DateAxis.new(root, {
+                                maxDeviation: 0.1,
+                                baseInterval: {
+                                    timeUnit: "day",
+                                    count: 1
+                                },
+                                renderer: am5xy.AxisRendererX.new(root, {})
+                            })
+                        );
 
-                var yAxis = chart.yAxes.push(
-                    am5xy.ValueAxis.new(root, {
-                        renderer: am5xy.AxisRendererY.new(root, {})
-                    })
-                );
+                        var yAxis = chart.yAxes.push(
+                            am5xy.ValueAxis.new(root, {
+                                renderer: am5xy.AxisRendererY.new(root, {})
+                            })
+                        );
 
-                var series = chart.series.push(
-                    am5xy.LineSeries.new(root, {
-                        name: "Series",
-                        xAxis: xAxis,
-                        yAxis: yAxis,
-                        valueYField: "value", // Change this according to your data
-                        valueXField: "date" // Change this according to your data
-                    })
-                );
+                        var series1 = chart.series.push(
+                            am5xy.LineSeries.new(root, {
+                                name: "Puntos de acceso",
+                                xAxis: xAxis,
+                                yAxis: yAxis,
+                                valueYField: "Puntos_de_acceso",
+                                valueXField: "Nombre"
+                            })
+                        );
 
-                series.data.setAll(data);
+                        series1.data.setAll(data);
 
-                // Add cursor
-                chart.set("cursor", am5xy.XYCursor.new(root, {}));
-            });
+                        chart.set("cursor", am5xy.XYCursor.new(root, {}));
+                    });
+                })
+                .catch(error => console.error('Error loading data:', error));
+        });
     </script>
 </body>
 </html>
