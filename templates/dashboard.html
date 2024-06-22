@@ -1,66 +1,163 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard 1</title>
+    <title>Dashboard</title>
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <style>
+        /* Estilos para las pestañas */
+        .tab {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>Dashboard 1</h1>
-    <div id="chartdiv1" style="width: 100%; height: 400px;"></div>
+    <h1>Dashboard</h1>
 
+    <!-- Pestañas para los dashboards -->
+    <div>
+        <button onclick="openTab(event, 'dashboard1')">Dashboard 1</button>
+        <button onclick="openTab(event, 'dashboard2')">Dashboard 2</button>
+    </div>
+
+    <!-- Contenido de los dashboards -->
+    <div id="dashboard1" class="tab">
+        <!-- Contenido del Dashboard 1 -->
+        <h2>Dashboard 1</h2>
+        <div id="chartdiv1" style="width: 100%; height: 400px;"></div>
+    </div>
+
+    <div id="dashboard2" class="tab">
+        <!-- Contenido del Dashboard 2 -->
+        <h2>Dashboard 2</h2>
+        <div id="chartdiv2" style="width: 100%; height: 400px;"></div>
+    </div>
+
+    <!-- Script para alternar entre pestañas y cargar datos -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            document.getElementById(tabName).style.display = "block";
+
+            // Cargar datos para el dashboard seleccionado
+            fetchData(tabName);
+        }
+
+        function fetchData(tabName) {
             fetch('/data')  // Ruta para obtener datos del CSV como JSON desde Flask
                 .then(response => response.json())
                 .then(data => {
-                    am5.ready(function() {
-                        var root = am5.Root.new("chartdiv1");
-
-                        var chart = root.container.children.push(
-                            am5xy.XYChart.new(root, {
-                                panX: true,
-                                panY: true,
-                                wheelX: "panX",
-                                wheelY: "zoomX",
-                                pinchZoomX: true
-                            })
-                        );
-
-                        var xAxis = chart.xAxes.push(
-                            am5xy.DateAxis.new(root, {
-                                maxDeviation: 0.1,
-                                baseInterval: {
-                                    timeUnit: "day",
-                                    count: 1
-                                },
-                                renderer: am5xy.AxisRendererX.new(root, {})
-                            })
-                        );
-
-                        var yAxis = chart.yAxes.push(
-                            am5xy.ValueAxis.new(root, {
-                                renderer: am5xy.AxisRendererY.new(root, {})
-                            })
-                        );
-
-                        var series1 = chart.series.push(
-                            am5xy.LineSeries.new(root, {
-                                name: "Puntos de acceso",
-                                xAxis: xAxis,
-                                yAxis: yAxis,
-                                valueYField: "Puntos_de_acceso",
-                                valueXField: "Nombre"
-                            })
-                        );
-
-                        series1.data.setAll(data);
-
-                        chart.set("cursor", am5xy.XYCursor.new(root, {}));
-                    });
+                    if (tabName === 'dashboard1') {
+                        renderDashboard1(data);
+                    } else if (tabName === 'dashboard2') {
+                        renderDashboard2(data);
+                    }
                 })
                 .catch(error => console.error('Error loading data:', error));
-        });
+        }
+
+        function renderDashboard1(data) {
+            am5.ready(function() {
+                var root = am5.Root.new("chartdiv1");
+
+                var chart = root.container.children.push(
+                    am5xy.XYChart.new(root, {
+                        panX: true,
+                        panY: true,
+                        wheelX: "panX",
+                        wheelY: "zoomX",
+                        pinchZoomX: true
+                    })
+                );
+
+                var xAxis = chart.xAxes.push(
+                    am5xy.DateAxis.new(root, {
+                        maxDeviation: 0.1,
+                        baseInterval: {
+                            timeUnit: "day",
+                            count: 1
+                        },
+                        renderer: am5xy.AxisRendererX.new(root, {})
+                    })
+                );
+
+                var yAxis = chart.yAxes.push(
+                    am5xy.ValueAxis.new(root, {
+                        renderer: am5xy.AxisRendererY.new(root, {})
+                    })
+                );
+
+                var series1 = chart.series.push(
+                    am5xy.LineSeries.new(root, {
+                        name: "Puntos de acceso",
+                        xAxis: xAxis,
+                        yAxis: yAxis,
+                        valueYField: "Puntos_de_acceso",
+                        valueXField: "Nombre"
+                    })
+                );
+
+                series1.data.setAll(data);
+
+                chart.set("cursor", am5xy.XYCursor.new(root, {}));
+            });
+        }
+
+        function renderDashboard2(data) {
+            am5.ready(function() {
+                var root = am5.Root.new("chartdiv2");
+
+                var chart = root.container.children.push(
+                    am5xy.XYChart.new(root, {
+                        panX: true,
+                        panY: true,
+                        wheelX: "panX",
+                        wheelY: "zoomX",
+                        pinchZoomX: true
+                    })
+                );
+
+                var xAxis = chart.xAxes.push(
+                    am5xy.DateAxis.new(root, {
+                        maxDeviation: 0.1,
+                        baseInterval: {
+                            timeUnit: "day",
+                            count: 1
+                        },
+                        renderer: am5xy.AxisRendererX.new(root, {})
+                    })
+                );
+
+                var yAxis = chart.yAxes.push(
+                    am5xy.ValueAxis.new(root, {
+                        renderer: am5xy.AxisRendererY.new(root, {})
+                    })
+                );
+
+                var series2 = chart.series.push(
+                    am5xy.LineSeries.new(root, {
+                        name: "Costo por punto",
+                        xAxis: xAxis,
+                        yAxis: yAxis,
+                        valueYField: "Costo_punto",
+                        valueXField: "Nombre"
+                    })
+                );
+
+                series2.data.setAll(data);
+
+                chart.set("cursor", am5xy.XYCursor.new(root, {}));
+            });
+        }
+
+        // Cargar el primer dashboard por defecto al cargar la página
+        window.onload = function() {
+            openTab(event, 'dashboard1');
+        };
     </script>
 </body>
 </html>
