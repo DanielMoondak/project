@@ -9,6 +9,9 @@
         .tab {
             display: none;
         }
+        .active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -49,6 +52,11 @@
             fetch('/data')  // Ruta para obtener datos del CSV como JSON desde Flask
                 .then(response => response.json())
                 .then(data => {
+                    if (data.error) {
+                        console.error('Error loading data:', data.error);
+                        return;
+                    }
+
                     // Dashboard 1
                     am5.ready(function() {
                         var root = am5.Root.new("chartdiv1");
