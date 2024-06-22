@@ -18,12 +18,13 @@ def dashboard():
 @app.route('/data')
 def get_data():
     try:
-        csv_path = os.path.join('project', 'data', 'wifi.csv')  # Ruta al archivo CSV
+        csv_path = os.path.join(os.getcwd(), 'project', 'data', 'wifi.csv')
         df = pd.read_csv(csv_path)
         data = df.to_dict(orient='records')
         return jsonify(data)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
