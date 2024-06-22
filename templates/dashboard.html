@@ -94,27 +94,7 @@
                             })
                         );
 
-                        var series2 = chart.series.push(
-                            am5xy.LineSeries.new(root, {
-                                name: "Costo por punto",
-                                xAxis: xAxis,
-                                yAxis: yAxis,
-                                valueYField: "Costo_punto", // Campo Y
-                                categoryXField: "Nombre" // Campo X
-                            })
-                        );
-
-                        var series3 = chart.series.push(
-                            am5xy.LineSeries.new(root, {
-                                name: "Retorno de inversión",
-                                xAxis: xAxis,
-                                yAxis: yAxis,
-                                valueYField: "Retorno_inv", // Campo Y
-                                categoryXField: "Nombre" // Campo X
-                            })
-                        );
-
-                        chart.data.setAll(data);
+                        series1.data.setAll(data);
 
                         chart.set("cursor", am5xy.XYCursor.new(root, {}));
                     });
@@ -146,6 +126,28 @@
                             })
                         );
 
-                        var series1 = chart.series.push(
+                        var series2 = chart.series.push(
                             am5xy.LineSeries.new(root, {
-                                name: "Alca
+                                name: "Retorno de inversión",
+                                xAxis: xAxis,
+                                yAxis: yAxis,
+                                valueYField: "Retorno_inv", // Campo Y
+                                categoryXField: "Nombre" // Campo X
+                            })
+                        );
+
+                        series2.data.setAll(data);
+
+                        chart.set("cursor", am5xy.XYCursor.new(root, {}));
+                    });
+                })
+                .catch(error => console.error('Error loading data:', error));
+        });
+
+        // Abre el primer tab por defecto
+        window.onload = function() {
+            openTab(null, 'dashboard1');
+        };
+    </script>
+</body>
+</html>
