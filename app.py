@@ -5,7 +5,8 @@ import os
 app = Flask(__name__)
 
 # Configuración de la base de datos MySQL
-app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_HOST'] = 'db-mysql-nyc3-83474-do-user-83474-0.b.db.ondigitalocean.com'
+app.config['MYSQL_PORT'] = 25060
 app.config['MYSQL_USER'] = 'id22349349_daniel'
 app.config['MYSQL_PASSWORD'] = 'Dani123$'
 app.config['MYSQL_DB'] = 'id22349349_dashboard'
@@ -35,21 +36,7 @@ def get_data():
         cur.close()
         return jsonify(data)
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-        # Devuelve un error 500 en caso de excepción
-
-# Endpoint temporal para verificar los datos obtenidos
-@app.route('/rawdata')
-def get_raw_data():
-    try:
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM wifi")
-        data = cur.fetchall()
-        cur.close()
-        return jsonify(data)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': str(e)}), 500  # Devuelve un error 500 en caso de excepción
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
