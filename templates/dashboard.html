@@ -1,163 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
-    <style>
-        /* Estilos para las pestañas */
-        .tab {
-            display: none;
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1>Dashboard</h1>
-
-    <!-- Pestañas para los dashboards -->
-    <div>
-        <button onclick="openTab(event, 'dashboard1')">Dashboard 1</button>
-        <button onclick="openTab(event, 'dashboard2')">Dashboard 2</button>
-    </div>
-
-    <!-- Contenido de los dashboards -->
-    <div id="dashboard1" class="tab">
-        <!-- Contenido del Dashboard 1 -->
+    <h1>Dashboard Principal</h1>
+    <button onclick="showDashboard1()">Dashboard 1</button>
+    <button onclick="showDashboard2()">Dashboard 2</button>
+    
+    <div id="dashboard1">
         <h2>Dashboard 1</h2>
-        <div id="chartdiv1" style="width: 100%; height: 400px;"></div>
+        <canvas id="chart1"></canvas>
     </div>
-
-    <div id="dashboard2" class="tab">
-        <!-- Contenido del Dashboard 2 -->
+    
+    <div id="dashboard2" style="display: none;">
         <h2>Dashboard 2</h2>
-        <div id="chartdiv2" style="width: 100%; height: 400px;"></div>
+        <canvas id="chart2"></canvas>
     </div>
-
-    <!-- Script para alternar entre pestañas y cargar datos -->
+    
     <script>
-        function openTab(evt, tabName) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tab");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            document.getElementById(tabName).style.display = "block";
-
-            // Cargar datos para el dashboard seleccionado
-            fetchData(tabName);
-        }
-
-        function fetchData(tabName) {
-            fetch('/data')  // Ruta para obtener datos del backend Flask
+        function fetchData() {
+            return fetch('/data')
                 .then(response => response.json())
                 .then(data => {
-                    if (tabName === 'dashboard1') {
-                        renderDashboard1(data);
-                    } else if (tabName === 'dashboard2') {
-                        renderDashboard2(data);
+                    if (data.error) {
+                        console.error(data.error);
+                        return [];
                     }
-                })
-                .catch(error => console.error('Error loading data:', error));
+                    return data;
+                });
         }
 
-        function renderDashboard1(data) {
-            am5.ready(function() {
-                var root = am5.Root.new("chartdiv1");
-
-                var chart = root.container.children.push(
-                    am5xy.XYChart.new(root, {
-                        panX: true,
-                        panY: true,
-                        wheelX: "panX",
-                        wheelY: "zoomX",
-                        pinchZoomX: true
-                    })
-                );
-
-                var xAxis = chart.xAxes.push(
-                    am5xy.DateAxis.new(root, {
-                        maxDeviation: 0.1,
-                        baseInterval: {
-                            timeUnit: "day",
-                            count: 1
-                        },
-                        renderer: am5xy.AxisRendererX.new(root, {})
-                    })
-                );
-
-                var yAxis = chart.yAxes.push(
-                    am5xy.ValueAxis.new(root, {
-                        renderer: am5xy.AxisRendererY.new(root, {})
-                    })
-                );
-
-                var series1 = chart.series.push(
-                    am5xy.LineSeries.new(root, {
-                        name: "Puntos de acceso",
-                        xAxis: xAxis,
-                        yAxis: yAxis,
-                        valueYField: "Puntos_de_acceso",
-                        valueXField: "Nombre"
-                    })
-                );
-
-                series1.data.setAll(data);
-
-                chart.set("cursor", am5xy.XYCursor.new(root, {}));
+        function showDashboard1() {
+            document.getElementById('dashboard1').style.display = 'block';
+            document.getElementById('dashboard2').style.display = 'none';
+            fetchData().then(data => {
+                const ctx = document.getElementById('chart1').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.map(row => row.Colonia),
+                        datasets: [{
+                            label: 'Puntos de acceso',
+                            data: data.map(row => row.Puntos_de_acceso),
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
             });
         }
 
-        function renderDashboard2(data) {
-            am5.ready(function() {
-                var root = am5.Root.new("chartdiv2");
-
-                var chart = root.container.children.push(
-                    am5xy.XYChart.new(root, {
-                        panX: true,
-                        panY: true,
-                        wheelX: "panX",
-                        wheelY: "zoomX",
-                        pinchZoomX: true
-                    })
-                );
-
-                var xAxis = chart.xAxes.push(
-                    am5xy.DateAxis.new(root, {
-                        maxDeviation: 0.1,
-                        baseInterval: {
-                            timeUnit: "day",
-                            count: 1
-                        },
-                        renderer: am5xy.AxisRendererX.new(root, {})
-                    })
-                );
-
-                var yAxis = chart.yAxes.push(
-                    am5xy.ValueAxis.new(root, {
-                        renderer: am5xy.AxisRendererY.new(root, {})
-                    })
-                );
-
-                var series2 = chart.series.push(
-                    am5xy.LineSeries.new(root, {
-                        name: "Costo por punto",
-                        xAxis: xAxis,
-                        yAxis: yAxis,
-                        valueYField: "Costo_punto",
-                        valueXField: "Nombre"
-                    })
-                );
-
-                series2.data.setAll(data);
-
-                chart.set("cursor", am5xy.XYCursor.new(root, {}));
+        function showDashboard2() {
+            document.getElementById('dashboard1').style.display = 'none';
+            document.getElementById('dashboard2').style.display = 'block';
+            fetchData().then(data => {
+                const ctx = document.getElementById('chart2').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.map(row => row.Colonia),
+                        datasets: [{
+                            label: 'Retorno de inversión',
+                            data: data.map(row => row.Retorno_inv),
+                            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                            borderColor: 'rgba(153, 102, 255, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
             });
         }
-
-        // Cargar el primer dashboard por defecto al cargar la página
-        window.onload = function() {
-            openTab(event, 'dashboard1');
-        };
+        
+        // Muestra el primer dashboard por defecto
+        showDashboard1();
     </script>
 </body>
 </html>
