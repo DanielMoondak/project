@@ -42,107 +42,122 @@
                 tabcontent[i].style.display = "none";
             }
             document.getElementById(tabName).style.display = "block";
+
+            // Cargar datos para el dashboard seleccionado
+            fetchData(tabName);
         }
 
         // Función para cargar y renderizar gráficos con AmCharts
         document.addEventListener('DOMContentLoaded', function () {
-            fetch('/data')  // Ruta para obtener datos del CSV como JSON desde Flask
+            fetchData('dashboard1'); // Cargar datos inicialmente para el primer dashboard por defecto
+        });
+
+        function fetchData(tabName) {
+            fetch('/data')  // Ruta para obtener datos del backend Flask
                 .then(response => response.json())
                 .then(data => {
-                    // Dashboard 1
-                    am5.ready(function() {
-                        var root = am5.Root.new("chartdiv1");
-
-                        var chart = root.container.children.push(
-                            am5xy.XYChart.new(root, {
-                                panX: true,
-                                panY: true,
-                                wheelX: "panX",
-                                wheelY: "zoomX",
-                                pinchZoomX: true
-                            })
-                        );
-
-                        var xAxis = chart.xAxes.push(
-                            am5xy.DateAxis.new(root, {
-                                maxDeviation: 0.1,
-                                baseInterval: {
-                                    timeUnit: "day",
-                                    count: 1
-                                },
-                                renderer: am5xy.AxisRendererX.new(root, {})
-                            })
-                        );
-
-                        var yAxis = chart.yAxes.push(
-                            am5xy.ValueAxis.new(root, {
-                                renderer: am5xy.AxisRendererY.new(root, {})
-                            })
-                        );
-
-                        var series1 = chart.series.push(
-                            am5xy.LineSeries.new(root, {
-                                name: "Puntos de acceso",
-                                xAxis: xAxis,
-                                yAxis: yAxis,
-                                valueYField: "Puntos_de_acceso",
-                                valueXField: "Nombre"
-                            })
-                        );
-
-                        series1.data.setAll(data);
-
-                        chart.set("cursor", am5xy.XYCursor.new(root, {}));
-                    });
-
-                    // Dashboard 2
-                    am5.ready(function() {
-                        var root = am5.Root.new("chartdiv2");
-
-                        var chart = root.container.children.push(
-                            am5xy.XYChart.new(root, {
-                                panX: true,
-                                panY: true,
-                                wheelX: "panX",
-                                wheelY: "zoomX",
-                                pinchZoomX: true
-                            })
-                        );
-
-                        var xAxis = chart.xAxes.push(
-                            am5xy.DateAxis.new(root, {
-                                maxDeviation: 0.1,
-                                baseInterval: {
-                                    timeUnit: "day",
-                                    count: 1
-                                },
-                                renderer: am5xy.AxisRendererX.new(root, {})
-                            })
-                        );
-
-                        var yAxis = chart.yAxes.push(
-                            am5xy.ValueAxis.new(root, {
-                                renderer: am5xy.AxisRendererY.new(root, {})
-                            })
-                        );
-
-                        var series2 = chart.series.push(
-                            am5xy.LineSeries.new(root, {
-                                name: "Costo por punto",
-                                xAxis: xAxis,
-                                yAxis: yAxis,
-                                valueYField: "Costo_punto",
-                                valueXField: "Nombre"
-                            })
-                        );
-
-                        series2.data.setAll(data);
-
-                        chart.set("cursor", am5xy.XYCursor.new(root, {}));
-                    });
+                    if (tabName === 'dashboard1') {
+                        renderDashboard1(data);
+                    } else if (tabName === 'dashboard2') {
+                        renderDashboard2(data);
+                    }
                 })
                 .catch(error => console.error('Error loading data:', error));
-        });
+        }
+
+        function renderDashboard1(data) {
+            am5.ready(function() {
+                var root = am5.Root.new("chartdiv1");
+
+                var chart = root.container.children.push(
+                    am5xy.XYChart.new(root, {
+                        panX: true,
+                        panY: true,
+                        wheelX: "panX",
+                        wheelY: "zoomX",
+                        pinchZoomX: true
+                    })
+                );
+
+                var xAxis = chart.xAxes.push(
+                    am5xy.DateAxis.new(root, {
+                        maxDeviation: 0.1,
+                        baseInterval: {
+                            timeUnit: "day",
+                            count: 1
+                        },
+                        renderer: am5xy.AxisRendererX.new(root, {})
+                    })
+                );
+
+                var yAxis = chart.yAxes.push(
+                    am5xy.ValueAxis.new(root, {
+                        renderer: am5xy.AxisRendererY.new(root, {})
+                    })
+                );
+
+                var series1 = chart.series.push(
+                    am5xy.LineSeries.new(root, {
+                        name: "Puntos de acceso",
+                        xAxis: xAxis,
+                        yAxis: yAxis,
+                        valueYField: "Puntos_de_acceso",
+                        valueXField: "Nombre"
+                    })
+                );
+
+                series1.data.setAll(data);
+
+                chart.set("cursor", am5xy.XYCursor.new(root, {}));
+            });
+        }
+
+        function renderDashboard2(data) {
+            am5.ready(function() {
+                var root = am5.Root.new("chartdiv2");
+
+                var chart = root.container.children.push(
+                    am5xy.XYChart.new(root, {
+                        panX: true,
+                        panY: true,
+                        wheelX: "panX",
+                        wheelY: "zoomX",
+                        pinchZoomX: true
+                    })
+                );
+
+                var xAxis = chart.xAxes.push(
+                    am5xy.DateAxis.new(root, {
+                        maxDeviation: 0.1,
+                        baseInterval: {
+                            timeUnit: "day",
+                            count: 1
+                        },
+                        renderer: am5xy.AxisRendererX.new(root, {})
+                    })
+                );
+
+                var yAxis = chart.yAxes.push(
+                    am5xy.ValueAxis.new(root, {
+                        renderer: am5xy.AxisRendererY.new(root, {})
+                    })
+                );
+
+                var series2 = chart.series.push(
+                    am5xy.LineSeries.new(root, {
+                        name: "Costo por punto",
+                        xAxis: xAxis,
+                        yAxis: yAxis,
+                        valueYField: "Costo_punto",
+                        valueXField: "Nombre"
+                    })
+                );
+
+                series2.data.setAll(data);
+
+                chart.set("cursor", am5xy.XYCursor.new(root, {}));
+            });
+        }
     </script>
 </body>
 </html>
